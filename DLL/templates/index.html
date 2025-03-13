@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dự đoán bệnh tiểu đường</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, rgb(68, 220, 205), rgb(8, 219, 219));
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            max-width: 700px;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-in-out;
+        }
+        h1 {
+            text-align: center;
+            color: #4A90E2;
+            margin-bottom: 30px;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .btn-custom {
+            width: 100%;
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        .btn-primary { background: #4A90E2; }
+        .btn-success { background: #47D764; }
+        .divider {
+            text-align: center;
+            margin: 30px 0;
+            font-weight: bold;
+            color: #555;
+            position: relative;
+        }
+        .divider::before, .divider::after {
+            content: "";
+            position: absolute;
+            width: 40%;
+            height: 1px;
+            background: #aaa;
+            top: 50%;
+        }
+        .divider::before { left: 0; }
+        .divider::after { right: 0; }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🔍 Dự đoán bệnh tiểu đường</h1>
+
+    <!-- Form nhập thủ công -->
+    <form action="/predict" method="post">
+        <label for="gender">Giới tính:</label>
+        <select name="gender" id="gender" class="form-control" required>
+            <option value="">Chọn</option>
+            <option value="male">Nam</option>
+            <option value="female">Nữ</option>
+        </select>
+
+        <label for="age">Tuổi:</label>
+        <input type="number" name="age" id="age" class="form-control" min="1" max="100" required>
+
+        <label for="hypertension">Tiền sử bệnh huyết áp:</label>
+        <select name="hypertension" id="hypertension" class="form-control" required>
+            <option value="-1">Chọn</option>
+            <option value="1">Có</option>
+            <option value="0">Không</option>
+        </select>
+
+        <label for="heart_disease">Tiền sử bệnh tim:</label>
+        <select name="heart_disease" id="heart_disease" class="form-control" required>
+            <option value="-1">Chọn</option>
+            <option value="1">Có</option>
+            <option value="0">Không</option>
+        </select>
+
+        <label for="smoking_history">Tiền sử hút thuốc:</label>
+        <select name="smoking_history" id="smoking_history" class="form-control" required>
+            <option value="never">Không bao giờ</option>
+            <option value="current">Đang hút thuốc</option>
+            <option value="former">Đã từng hút thuốc</option>
+        </select>
+
+        <label for="bmi">BMI:</label>
+        <input type="number" name="bmi" class="form-control" step="0.1" required>
+
+        <label for="hba1c">Chỉ số HbA1c:</label>
+        <input type="number" name="hba1c" class="form-control" step="0.1" required>
+
+        <label for="glucose">Chỉ số đường huyết:</label>
+        <input type="number" name="glucose" class="form-control" required>
+
+        <button type="submit" class="btn btn-primary btn-custom">Dự đoán</button>
+    </form>
+
+    <div class="divider">HOẶC</div>
+
+    <!-- Form tải lên file CSV -->
+    <form action="/predict_csv" method="post" enctype="multipart/form-data">
+        <label>Tải lên file CSV:</label>
+        <input type="file" name="file" class="form-control" accept=".csv" required>
+        <button type="submit" class="btn btn-success btn-custom">Dự đoán từ CSV</button>
+    </form>
+
+    {% if prediction_result %}
+        <h2 class="text-center mt-4">Kết quả: <span class="badge bg-success">{{ prediction_result }}</span></h2>
+    {% endif %}
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
